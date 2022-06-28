@@ -7,11 +7,7 @@ const MINON_ENEMY_COLOR = Color(1,0,0)
 const MINON_OUTLINE_SIZE = 7.0
 const MINION_OUTLINE_COLOR = Color(0,0,0)
 
-var minion_owner = "unknown"
-func set_minion_owner(value):
-	minion_owner = value
-	update()
-
+onready var minion_area = $Area
 onready var health_bar = $HealthBar
 func setup_health_bar():
 	health_bar.min_value = 0
@@ -52,6 +48,20 @@ func take_damage(value):
 	add_incoming_damage(-value)
 	if health <= 0:
 		kill()
+
+var minion_owner = "unknown"
+func set_minion_owner(value):
+	minion_owner = value
+	update()
+
+func update_area():
+	if minion_owner == "player":
+		minion_area.set_identity("player_minion")
+	else:
+		minion_area.set_identity("enemy_minion")
+
+func _ready():
+	update_area()
 
 func _draw():
 	draw_circle(MINION_POSITION, MINON_OUTLINE_SIZE, MINION_OUTLINE_COLOR)

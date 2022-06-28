@@ -58,11 +58,11 @@ func _on_Area_area_exited(area):
 		update()
 
 func _on_Range_area_entered(area):
-	if area.identify() == "enemy":
+	if area.identify() == "enemy_minion":
 		enemies_in_range.push_back(area.get_parent())
 
 func _on_Range_area_exited(area):
-	if area.identify() == "enemy":
+	if area.identify() == "enemy_minion":
 		enemies_in_range.erase(area.get_parent())
 
 func _on_ShootTimer_timeout():
