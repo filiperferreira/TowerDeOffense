@@ -18,11 +18,7 @@ identity = "enemy_spawner"
 position = Vector2( -250, 0 )
 identity = "player_spawner"
 
-[node name="Enemies" type="Node" parent="."]
-
 [node name="PathPoints" type="Node" parent="."]
-
-[node name="Towers" type="Node" parent="."]
 
 [node name="PathArea" parent="." instance=ExtResource( 4 )]
 identity = "path"

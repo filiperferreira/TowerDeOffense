@@ -21,8 +21,8 @@ custom_constants/margin_bottom = 10
 [node name="ManagementMode" type="Label" parent="CanvasLayer/MarginContainer"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 88.0
+margin_right = 1014.0
 margin_bottom = 24.0
-size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Tower Mode"
+align = 1

@@ -5,11 +5,11 @@ const ROAD_WIDTH = 16.0
 const ROAD_OUTLINE_COLOR = Color(0,0,0)
 const ROAD_OUTLINE_WIDTH = 20.0
 
+const MINION = preload("res://Minion.tscn")
+
 onready var enemy_spawner = $EnemySpawner
 onready var player_spawner = $PlayerSpawner
-onready var enemies = $Enemies
 onready var path_points = $PathPoints
-onready var towers = $Towers
 onready var path_area = $PathArea
 
 onready var path = []
@@ -24,9 +24,7 @@ func _ready():
 
 func buy_tower(tower):
 	if tower.can_be_placed():
-		var placed_tower = tower.duplicate()
-		placed_tower.place()
-		towers.add_child(placed_tower)
+		player_spawner.add_tower(tower)
 
 func calculate_road_collider(point_1, point_2):
 	var x_distance = point_1.x - point_2.x
@@ -53,15 +51,10 @@ func build_path():
 		var path_collider = calculate_road_collider(path[i], path[i+1])
 		path_area.add_child(path_collider)
 
-func spawn_enemy(enemy):
-	enemy.set_target_position(path[1])
-	enemy.connect("died", self, "kill")
-	enemy.connect("target_reached", self, "update_target")
-	enemies.add_child(enemy)
-
-func kill(enemy):
-	enemies.remove_child(enemy)
-	enemy.call_deferred("queue_free")
+func spawn_minion():
+	var minion = MINION.instance()
+	minion.set_target_position(path[1])
+	player_spawner.spawn_minion(minion)
 
 func update_target(enemy):
 	enemy.set_target_position(path[enemy.get_targets_reached() + 1])

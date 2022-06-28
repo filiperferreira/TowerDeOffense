@@ -20,11 +20,13 @@ func _process(_delta):
 		mode_label_update("Tower Mode")
 		tower_visual.set_visible(true)
 	elif Input.is_action_just_pressed("W"):
-		state = "minions"
+		state = "minion"
 		mode_label_update("Minion Mode")
 		tower_visual.set_visible(false)
 	elif state == "tower" and Input.is_action_just_pressed("click"):
 		level.buy_tower(tower_visual)
+	elif state == "minion" and Input.is_action_just_pressed("space"):
+		level.spawn_minion()
 	
 	if tower_visual != null:
 		tower_visual.set_position(get_global_mouse_position())

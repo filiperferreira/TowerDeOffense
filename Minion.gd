@@ -1,10 +1,16 @@
 extends Node2D
 
-const ENEMY_POSITION = Vector2(0,0)
-const ENEMY_SIZE = 5.0
-const ENEMY_COLOR = Color(1,0,0)
-const ENEMY_OUTLINE_SIZE = 7.0
-const ENEMY_OUTLINE_COLOR = Color(0,0,0)
+const MINION_POSITION = Vector2(0,0)
+const MINION_SIZE = 5.0
+const MINON_PLAYER_COLOR = Color(0,0,1)
+const MINON_ENEMY_COLOR = Color(1,0,0)
+const MINON_OUTLINE_SIZE = 7.0
+const MINION_OUTLINE_COLOR = Color(0,0,0)
+
+var minion_owner = "unknown"
+func set_minion_owner(value):
+	minion_owner = value
+	update()
 
 onready var health_bar = $HealthBar
 func setup_health_bar():
@@ -16,7 +22,7 @@ func health_bar_take_damage(value):
 	if !health_bar.is_visible():
 		health_bar.set_visible(true)
 
-var speed = 20.0
+var speed = 100.0
 var target_position
 func set_target_position(new_target_position):
 	target_position = new_target_position
@@ -48,8 +54,11 @@ func take_damage(value):
 		kill()
 
 func _draw():
-	draw_circle(ENEMY_POSITION, ENEMY_OUTLINE_SIZE, ENEMY_OUTLINE_COLOR)
-	draw_circle(ENEMY_POSITION, ENEMY_SIZE, ENEMY_COLOR)
+	draw_circle(MINION_POSITION, MINON_OUTLINE_SIZE, MINION_OUTLINE_COLOR)
+	if minion_owner == "player":
+		draw_circle(MINION_POSITION, MINION_SIZE, MINON_PLAYER_COLOR)
+	else:
+		draw_circle(MINION_POSITION, MINION_SIZE, MINON_ENEMY_COLOR)
 
 signal target_reached
 func _process(delta):
@@ -58,8 +67,11 @@ func _process(delta):
 		targets_reached += 1
 		emit_signal("target_reached", self)
 
-signal died
 func kill():
 	for bullet in targeted_by_list:
 		bullet.queue_free()
-	emit_signal("died", self)
+	queue_free()
+
+func _on_Area_area_entered(area):
+	if area.identify() == "enemy_spawner":
+		kill()

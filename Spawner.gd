@@ -8,9 +8,9 @@ const SPAWNER_OUTLINE_SIZE = Vector2(54,54)
 const SPAWNER_OUTLINE_POS = SPAWNER_OUTLINE_SIZE/2 - SPAWNER_OUTLINE_SIZE
 const SPAWNER_OUTLINE_COLOR = Color(0,0,0)
 
-const ENEMY = preload("res://Enemy.tscn")
-
 onready var area = $Area
+onready var towers = $Towers
+onready var minions = $Minions
 
 export var identity = "unknown"
 
@@ -24,11 +24,16 @@ func _draw():
 	else:
 		draw_rect(Rect2(SPAWNER_POS, SPAWNER_SIZE), SPAWNER_ENEMY_COLOR)
 
-signal enemy_spawn
-func spawn_enemy():
-	var enemy = ENEMY.instance()
-	enemy.position = get_global_position()
-	emit_signal("enemy_spawn", enemy)
+func spawn_minion(minion):
+	minion.connect("target_reached", self, "update_target")
+	minion.set_position(get_global_position())
+	if identity == "player_spawner":
+		minion.set_minion_owner("player")
+	else:
+		minion.set_minion_owner("enemy")
+	minions.add_child(minion)
 
-func _on_SpawnTimer_timeout():
-	spawn_enemy()
+func add_tower(tower):
+	var placed_tower = tower.duplicate()
+	placed_tower.place()
+	towers.add_child(placed_tower)
