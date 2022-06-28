@@ -10,7 +10,6 @@ extents = Vector2( 27, 27 )
 script = ExtResource( 1 )
 
 [node name="SpawnTimer" type="Timer" parent="."]
-autostart = true
 
 [node name="Area" parent="." instance=ExtResource( 2 )]
 identity = "spawner"

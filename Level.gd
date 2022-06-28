@@ -7,8 +7,8 @@ const ROAD_OUTLINE_WIDTH = 20.0
 
 const TOWER = preload("res://Tower.tscn")
 
-onready var spawner = $Spawner
-onready var castle = $Castle
+onready var enemy_spawner = $EnemySpawner
+onready var player_spawner = $PlayerSpawner
 onready var enemies = $Enemies
 onready var path_points = $PathPoints
 onready var towers = $Towers
@@ -23,7 +23,7 @@ func _draw():
 		draw_line(path[i], path[i+1], ROAD_COLOR, ROAD_WIDTH)
 
 func _ready():
-	spawner.connect("enemy_spawn", self, "spawn_enemy")
+#	spawner.connect("enemy_spawn", self, "spawn_enemy")
 	build_path()
 	tower_to_buy()
 
@@ -60,10 +60,10 @@ func calculate_road_collider(point_1, point_2):
 	return path_collider
 
 func build_path():
-	path.push_back(spawner.position)
+	path.push_back(player_spawner.position)
 	for point in path_points.get_children():
 		path.push_back(point.position)
-	path.push_back(castle.position)
+	path.push_back(enemy_spawner.position)
 	update()
 	for i in path.size() - 1:
 		var path_collider = calculate_road_collider(path[i], path[i+1])
