@@ -5,8 +5,6 @@ const ROAD_WIDTH = 16.0
 const ROAD_OUTLINE_COLOR = Color(0,0,0)
 const ROAD_OUTLINE_WIDTH = 20.0
 
-const TOWER = preload("res://Tower.tscn")
-
 onready var enemy_spawner = $EnemySpawner
 onready var player_spawner = $PlayerSpawner
 onready var enemies = $Enemies
@@ -15,7 +13,6 @@ onready var towers = $Towers
 onready var path_area = $PathArea
 
 onready var path = []
-var tower_visual
 
 func _draw():
 	for i in path.size() - 1:
@@ -23,24 +20,11 @@ func _draw():
 		draw_line(path[i], path[i+1], ROAD_COLOR, ROAD_WIDTH)
 
 func _ready():
-#	spawner.connect("enemy_spawn", self, "spawn_enemy")
 	build_path()
-	tower_to_buy()
 
-func _process(_delta):
-	if Input.is_action_just_pressed("click"):
-		buy_tower()
-	if tower_visual != null:
-		tower_visual.set_position(get_global_mouse_position())
-
-func tower_to_buy():
-	tower_visual = TOWER.instance()
-	tower_visual.set_position(get_global_mouse_position())
-	towers.add_child(tower_visual)
-
-func buy_tower():
-	if tower_visual.can_be_placed():
-		var placed_tower = tower_visual.duplicate()
+func buy_tower(tower):
+	if tower.can_be_placed():
+		var placed_tower = tower.duplicate()
 		placed_tower.place()
 		towers.add_child(placed_tower)
 
